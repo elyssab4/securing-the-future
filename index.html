@@ -8,24 +8,41 @@
 <style>
 body {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #2b0000, #5c0000, #8b0000);
-    color: white;
+    font-family: 'Courier New', monospace;
+    background: black;
+    color: #ff3b3b;
+    overflow-x: hidden;
+}
+
+/* Animated scan line */
+.scan-line {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: red;
+    box-shadow: 0 0 20px red;
+    animation: scan 4s linear infinite;
+}
+
+@keyframes scan {
+    0% { top: 0; }
+    100% { top: 100%; }
 }
 
 header {
     text-align: center;
-    padding: 50px 20px 30px;
+    padding: 60px 20px 20px;
 }
 
 h1 {
     font-size: 3em;
-    margin-bottom: 10px;
+    text-shadow: 0 0 15px red;
 }
 
-p.tagline {
-    font-size: 1.2em;
-    opacity: 0.9;
+.tagline {
+    opacity: 0.8;
 }
 
 .container {
@@ -35,90 +52,90 @@ p.tagline {
 }
 
 .card {
-    background: rgba(255,255,255,0.08);
+    border: 1px solid red;
     padding: 25px;
-    border-radius: 12px;
     margin-bottom: 30px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    box-shadow: 0 0 20px rgba(255,0,0,0.3);
+    background: rgba(255,0,0,0.05);
 }
 
 input {
     padding: 10px;
-    width: 60%;
-    border-radius: 6px;
-    border: none;
+    width: 70%;
+    background: black;
+    border: 1px solid red;
+    color: red;
     margin-top: 10px;
 }
 
 button {
-    background-color: #ff2e2e;
+    background: red;
+    color: black;
     border: none;
     padding: 10px 18px;
     margin-top: 15px;
-    border-radius: 6px;
     cursor: pointer;
-    font-size: 15px;
-    color: white;
-    transition: 0.3s;
+    font-weight: bold;
 }
 
 button:hover {
-    background-color: #cc0000;
+    background: #ff6b6b;
 }
 
 .result {
     margin-top: 15px;
-    font-weight: bold;
-    line-height: 1.5em;
+    min-height: 40px;
 }
 
-.quiz-buttons button {
-    margin: 5px;
+.typing {
+    border-right: 2px solid red;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% { border-color: transparent; }
 }
 </style>
 </head>
 
 <body>
 
+<div class="scan-line"></div>
+
 <header>
-    <h1>Securing the Future</h1>
-    <p class="tagline">Stay alert. Stay protected. Your digital identity matters.</p>
+    <h1>SECURING THE FUTURE</h1>
+    <p class="tagline">AI Threat Detection System Activated</p>
 </header>
 
 <div class="container">
 
     <div class="card">
-        <h2>Quick Risk Scan</h2>
-        <p>Enter your email to check for potential exposure risks.</p>
-        <input type="email" id="email" placeholder="example@email.com">
+        <h2>Identity Breach Scanner</h2>
+        <p>Enter your email to begin AI threat analysis.</p>
+        <input type="email" id="email" placeholder="target@email.com">
         <br>
-        <button onclick="scanRisk()">Run Scan</button>
+        <button onclick="scanRisk()">INITIATE SCAN</button>
         <div class="result" id="scanResult"></div>
     </div>
 
     <div class="card">
-        <h2>Digital Safety Check</h2>
+        <h2>Security Behavior Assessment</h2>
 
-        <p>Do you reuse the same password for multiple accounts?</p>
-        <div class="quiz-buttons">
-            <button onclick="addScore(0)">Yes</button>
-            <button onclick="addScore(15)">No</button>
-        </div>
+        <p>Reuse passwords?</p>
+        <button onclick="addScore(0)">YES</button>
+        <button onclick="addScore(20)">NO</button>
 
-        <p>Is your social media account private?</p>
-        <div class="quiz-buttons">
-            <button onclick="addScore(15)">Yes</button>
-            <button onclick="addScore(0)">No</button>
-        </div>
+        <p>Public social media?</p>
+        <button onclick="addScore(0)">YES</button>
+        <button onclick="addScore(20)">NO</button>
 
-        <p>Do you use Two-Factor Authentication?</p>
-        <div class="quiz-buttons">
-            <button onclick="addScore(15)">Yes</button>
-            <button onclick="addScore(0)">No</button>
-        </div>
+        <p>Two-Factor Authentication enabled?</p>
+        <button onclick="addScore(20)">YES</button>
+        <button onclick="addScore(0)">NO</button>
 
-        <button onclick="showScore()">Calculate My Score</button>
-        <button onclick="resetQuiz()">Reset</button>
+        <br>
+        <button onclick="showScore()">ANALYZE SECURITY PROFILE</button>
+        <button onclick="resetQuiz()">RESET</button>
 
         <div class="result" id="quizResult"></div>
     </div>
@@ -128,24 +145,41 @@ button:hover {
 <script>
 let score = 0;
 
+function typeEffect(element, text, speed = 30) {
+    element.innerHTML = "";
+    let i = 0;
+    function typing() {
+        if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typing, speed);
+        }
+    }
+    typing();
+}
+
 function scanRisk() {
     const email = document.getElementById("email").value;
     const result = document.getElementById("scanResult");
 
     if (!email.includes("@")) {
-        result.innerHTML = "Please enter a valid email address.";
+        typeEffect(result, "ERROR: Invalid email format detected.");
         return;
     }
 
-    if (email.includes("123") || email.includes("test")) {
-        result.innerHTML = "HIGH RISK: This email pattern is commonly found in breached databases. Change your passwords immediately and enable two-factor authentication.";
-    } 
-    else if (email.includes("gmail") || email.includes("yahoo")) {
-        result.innerHTML = "MODERATE RISK: Public email providers are frequent targets. Make sure you use strong, unique passwords.";
-    } 
-    else {
-        result.innerHTML = "LOW RISK: No obvious threat patterns detected. Continue practicing strong security habits.";
-    }
+    typeEffect(result, "Analyzing database breaches...");
+    
+    setTimeout(() => {
+        if (email.includes("123") || email.includes("test")) {
+            typeEffect(result, "THREAT LEVEL: CRITICAL. Multiple breach signatures detected. Immediate password reset recommended.");
+        } 
+        else if (email.includes("gmail") || email.includes("yahoo")) {
+            typeEffect(result, "THREAT LEVEL: MODERATE. Common provider detected. Strengthen security settings.");
+        } 
+        else {
+            typeEffect(result, "THREAT LEVEL: LOW. No significant breach patterns found. Continue safe practices.");
+        }
+    }, 2000);
 }
 
 function addScore(points) {
@@ -155,14 +189,14 @@ function addScore(points) {
 function showScore() {
     const result = document.getElementById("quizResult");
 
-    if (score >= 35) {
-        result.innerHTML = "Your Safety Score: " + score + "/45 — Strong protection habits.";
+    if (score >= 50) {
+        typeEffect(result, "SECURITY STATUS: STRONG DEFENSE PROTOCOLS ACTIVE.");
     } 
-    else if (score >= 20) {
-        result.innerHTML = "Your Safety Score: " + score + "/45 — Some vulnerabilities detected.";
+    else if (score >= 30) {
+        typeEffect(result, "SECURITY STATUS: VULNERABILITIES DETECTED.");
     } 
     else {
-        result.innerHTML = "Your Safety Score: " + score + "/45 — Your accounts may be at serious risk. Improve your privacy settings.";
+        typeEffect(result, "SECURITY STATUS: HIGH EXPOSURE RISK. ACTION REQUIRED.");
     }
 }
 
