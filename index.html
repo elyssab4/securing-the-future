@@ -1,1 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Securing the Future</title>
 
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    color: white;
+    text-align: center;
+}
+
+header {
+    padding: 40px;
+}
+
+h1 {
+    font-size: 3em;
+}
+
+button {
+    background-color: #00c6ff;
+    border: none;
+    padding: 12px 20px;
+    margin: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+button:hover {
+    background-color: #0072ff;
+}
+
+input {
+    padding: 10px;
+    width: 250px;
+    border-radius: 6px;
+    border: none;
+    margin: 10px;
+}
+
+.section {
+    margin: 40px;
+}
+
+.result {
+    font-size: 20px;
+    margin-top: 20px;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Securing the Future</h1>
+    <p>Your Data. Your Identity. Your Control.</p>
+</header>
+
+<div class="section">
+    <h2>Quick Risk Scan</h2>
+    <input type="email" id="email" placeholder="Enter your email">
+    <br>
+    <button onclick="scanRisk()">Check Risk</button>
+    <div class="result" id="scanResult"></div>
+</div>
+
+<div class="section">
+    <h2>Digital Safety Quiz</h2>
+
+    <p>Do you reuse passwords?</p>
+    <button onclick="addScore(0)">Yes</button>
+    <button onclick="addScore(10)">No</button>
+
+    <p>Is your social media account public?</p>
+    <button onclick="addScore(0)">Yes</button>
+    <button onclick="addScore(10)">No</button>
+
+    <p>Do you use Two-Factor Authentication (2FA)?</p>
+    <button onclick="addScore(10)">Yes</button>
+    <button onclick="addScore(0)">No</button>
+
+    <br>
+    <button onclick="showScore()">See My Safety Score</button>
+    <div class="result" id="quizResult"></div>
+</div>
+
+<script>
+let score = 0;
+
+function scanRisk() {
+    const email = document.getElementById("email").value;
+    const result = document.getElementById("scanResult");
+
+    if (email === "") {
+        result.innerHTML = "⚠ Please enter an email address.";
+        return;
+    }
+
+    // Simulated AI risk detection
+    const randomRisk = Math.floor(Math.random() * 3);
+
+    if (randomRisk === 0) {
+        result.innerHTML = "🟢 Low Risk: No major breaches detected. Keep using strong passwords and 2FA.";
+    } else if (randomRisk === 1) {
+        result.innerHTML = "🟡 Medium Risk: Your email may appear in older data leaks. Update passwords.";
+    } else {
+        result.innerHTML = "🔴 High Risk: Multiple breach patterns detected. Change passwords immediately and enable 2FA.";
+    }
+}
+
+function addScore(points) {
+    score += points;
+}
+
+function showScore() {
+    const result = document.getElementById("quizResult");
+    result.innerHTML = "Your Digital Safety Score: " + score + "/30";
+}
+</script>
+
+</body>
+</html>
