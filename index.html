@@ -14,7 +14,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Moving red scan line */
+/* Moving red scan line (once) */
 .scan-line {
     position: fixed;
     top: 0;
@@ -23,7 +23,7 @@ body {
     height: 3px;
     background: red;
     box-shadow: 0 0 20px red;
-    animation: scan 5s linear infinite;
+    animation: scan 5s linear forwards; /* forwards = stays at bottom */
 }
 
 @keyframes scan {
@@ -109,7 +109,7 @@ button:hover {
     top: 4px;
     font-size: 0.9em;
 }
-  
+
 .result {
     margin-top: 15px;
     line-height: 1.6em;
@@ -209,16 +209,19 @@ function scanRisk() {
     }, 1500);
 }
 
-// Quiz Button Selection with Checkmark
+// Quiz Button Selection (independent per question)
 function selectOption(button) {
-    // Remove selected class from sibling buttons in the same group
-    const siblings = button.parentElement.querySelectorAll(".quiz-btn");
-    siblings.forEach(btn => btn.classList.remove("selected"));
+    // Only deselect siblings in the same question group
+    const parent = button.parentElement;
+    const siblings = parent.querySelectorAll(".quiz-btn");
+    siblings.forEach(btn => {
+        if (btn !== button) btn.classList.remove("selected");
+    });
 
-    // Mark this button as selected
-    button.classList.add("selected");
+    // Toggle the clicked button
+    button.classList.toggle("selected");
 
-    // Recalculate score based on selected buttons
+    // Recalculate score based on all selected buttons
     score = 0;
     const selectedButtons = document.querySelectorAll(".quiz-btn.selected");
     selectedButtons.forEach(btn => {
