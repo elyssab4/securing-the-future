@@ -69,23 +69,41 @@ input {
 }
 
 button {
-    background: red;
-    color: black;
-    border: none;
-    padding: 10px 18px;
-    margin-top: 15px;
+    margin-top: 10px;
+    border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
 }
 
 button:hover {
-    background: #ff6b6b;
+    opacity: 0.8;
 }
 
 .result {
     margin-top: 15px;
     line-height: 1.6em;
     min-height: 40px;
+}
+
+/* Quiz buttons */
+.quiz-btn {
+    margin: 5px;
+    padding: 8px 16px;
+    background-color: red;
+    color: black;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.quiz-btn:hover {
+    background-color: #ff6b6b;
+}
+
+.quiz-btn.selected {
+    background-color: #ff0000;
+    color: white;
 }
 </style>
 </head>
@@ -101,6 +119,7 @@ button:hover {
 
 <div class="container">
 
+    <!-- Email Scan Card -->
     <div class="card">
         <h2>Identity Risk Check</h2>
         <p>Enter your email and I’ll review common exposure patterns.</p>
@@ -110,20 +129,21 @@ button:hover {
         <div class="result" id="scanResult"></div>
     </div>
 
+    <!-- Digital Habits Quiz -->
     <div class="card">
         <h2>Security Habits Check</h2>
 
         <p>Do you reuse passwords across different websites?</p>
-        <button onclick="addScore(0)">Yes</button>
-        <button onclick="addScore(20)">No</button>
+        <button class="quiz-btn" data-points="0" onclick="selectOption(this, 0)">Yes</button>
+        <button class="quiz-btn" data-points="20" onclick="selectOption(this, 20)">No</button>
 
         <p>Is your main social media account private?</p>
-        <button onclick="addScore(20)">Yes</button>
-        <button onclick="addScore(0)">No</button>
+        <button class="quiz-btn" data-points="20" onclick="selectOption(this, 20)">Yes</button>
+        <button class="quiz-btn" data-points="0" onclick="selectOption(this, 0)">No</button>
 
         <p>Do you use two-factor authentication?</p>
-        <button onclick="addScore(20)">Yes</button>
-        <button onclick="addScore(0)">No</button>
+        <button class="quiz-btn" data-points="20" onclick="selectOption(this, 20)">Yes</button>
+        <button class="quiz-btn" data-points="0" onclick="selectOption(this, 0)">No</button>
 
         <br>
         <button onclick="showScore()">Analyze My Habits</button>
@@ -132,11 +152,26 @@ button:hover {
         <div class="result" id="quizResult"></div>
     </div>
 
+    <!-- About AI Card -->
+    <div class="card">
+        <h2>About This AI</h2>
+        <p>
+            Securing the Future is an AI-inspired tool that helps users understand online identity risks 
+            such as data breaches and weak security habits. It simulates how AI can recognize risk patterns 
+            and give personalized safety tips.
+        </p>
+        <p>
+            This project focuses on prevention by encouraging strong passwords, private accounts, 
+            and two-factor authentication to help users protect their digital identity.
+        </p>
+    </div>
+
 </div>
 
 <script>
 let score = 0;
 
+// Email Scan Function
 function scanRisk() {
     const email = document.getElementById("email").value;
     const result = document.getElementById("scanResult");
@@ -164,30 +199,44 @@ function scanRisk() {
     }, 1500);
 }
 
-function addScore(points) {
-    score += points;
+// Quiz Button Selection
+function selectOption(button, points) {
+    // Remove selected class from sibling buttons in the same group
+    const siblings = button.parentElement.querySelectorAll(".quiz-btn");
+    siblings.forEach(btn => btn.classList.remove("selected"));
+
+    // Mark this button as selected
+    button.classList.add("selected");
+
+    // Recalculate score based on selected buttons
+    score = 0;
+    const selectedButtons = document.querySelectorAll(".quiz-btn.selected");
+    selectedButtons.forEach(btn => {
+        score += parseInt(btn.getAttribute("data-points"));
+    });
 }
 
+// Show Score
 function showScore() {
     const result = document.getElementById("quizResult");
 
     if (score >= 50) {
-        result.innerHTML =
-        "Your security score: " + score + "/60. You’re building strong digital protection habits. Keep it up.";
+        result.innerHTML = "Your security score: " + score + "/60. You’re building strong protective habits. Great job!";
     } 
     else if (score >= 30) {
-        result.innerHTML =
-        "Your security score: " + score + "/60. You’re on the right track, but there are areas where you could strengthen your protection.";
+        result.innerHTML = "Your security score: " + score + "/60. You’re doing well, but some habits could be stronger.";
     } 
     else {
-        result.innerHTML =
-        "Your security score: " + score + "/60. Your digital identity may be more exposed than you realize. Improving password practices and enabling 2FA would significantly increase your protection.";
+        result.innerHTML = "Your security score: " + score + "/60. Consider improving password strength and enabling 2FA to protect your identity.";
     }
 }
 
+// Reset Quiz
 function resetQuiz() {
     score = 0;
     document.getElementById("quizResult").innerHTML = "";
+    const allButtons = document.querySelectorAll(".quiz-btn");
+    allButtons.forEach(btn => btn.classList.remove("selected"));
 }
 </script>
 
