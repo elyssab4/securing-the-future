@@ -68,6 +68,7 @@ input {
     margin-top: 10px;
 }
 
+/* Buttons */
 button {
     margin-top: 10px;
     border-radius: 6px;
@@ -77,12 +78,6 @@ button {
 
 button:hover {
     opacity: 0.8;
-}
-
-.result {
-    margin-top: 15px;
-    line-height: 1.6em;
-    min-height: 40px;
 }
 
 /* Quiz buttons */
@@ -95,6 +90,7 @@ button:hover {
     cursor: pointer;
     font-weight: bold;
     transition: 0.3s;
+    position: relative;
 }
 
 .quiz-btn:hover {
@@ -104,6 +100,20 @@ button:hover {
 .quiz-btn.selected {
     background-color: #ff0000;
     color: white;
+}
+
+.quiz-btn.selected::after {
+    content: " ✅";
+    position: absolute;
+    right: 8px;
+    top: 4px;
+    font-size: 0.9em;
+}
+  
+.result {
+    margin-top: 15px;
+    line-height: 1.6em;
+    min-height: 40px;
 }
 </style>
 </head>
@@ -134,16 +144,16 @@ button:hover {
         <h2>Security Habits Check</h2>
 
         <p>Do you reuse passwords across different websites?</p>
-        <button class="quiz-btn" data-points="0" onclick="selectOption(this, 0)">Yes</button>
-        <button class="quiz-btn" data-points="20" onclick="selectOption(this, 20)">No</button>
+        <button class="quiz-btn" data-points="0" onclick="selectOption(this)">Yes</button>
+        <button class="quiz-btn" data-points="20" onclick="selectOption(this)">No</button>
 
         <p>Is your main social media account private?</p>
-        <button class="quiz-btn" data-points="20" onclick="selectOption(this, 20)">Yes</button>
-        <button class="quiz-btn" data-points="0" onclick="selectOption(this, 0)">No</button>
+        <button class="quiz-btn" data-points="20" onclick="selectOption(this)">Yes</button>
+        <button class="quiz-btn" data-points="0" onclick="selectOption(this)">No</button>
 
         <p>Do you use two-factor authentication?</p>
-        <button class="quiz-btn" data-points="20" onclick="selectOption(this, 20)">Yes</button>
-        <button class="quiz-btn" data-points="0" onclick="selectOption(this, 0)">No</button>
+        <button class="quiz-btn" data-points="20" onclick="selectOption(this)">Yes</button>
+        <button class="quiz-btn" data-points="0" onclick="selectOption(this)">No</button>
 
         <br>
         <button onclick="showScore()">Analyze My Habits</button>
@@ -199,8 +209,8 @@ function scanRisk() {
     }, 1500);
 }
 
-// Quiz Button Selection
-function selectOption(button, points) {
+// Quiz Button Selection with Checkmark
+function selectOption(button) {
     // Remove selected class from sibling buttons in the same group
     const siblings = button.parentElement.querySelectorAll(".quiz-btn");
     siblings.forEach(btn => btn.classList.remove("selected"));
