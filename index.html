@@ -8,50 +8,71 @@
 <style>
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0a1f44, #123c69);
     color: white;
-    text-align: center;
 }
 
 header {
-    padding: 40px;
+    text-align: center;
+    padding: 50px 20px 30px;
 }
 
 h1 {
     font-size: 3em;
+    margin-bottom: 10px;
 }
 
-button {
-    background-color: #00c6ff;
-    border: none;
-    padding: 12px 20px;
-    margin: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 8px;
+p.tagline {
+    font-size: 1.2em;
+    opacity: 0.9;
 }
 
-button:hover {
-    background-color: #0072ff;
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+.card {
+    background: rgba(255,255,255,0.08);
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
 input {
     padding: 10px;
-    width: 250px;
+    width: 60%;
     border-radius: 6px;
     border: none;
-    margin: 10px;
+    margin-top: 10px;
 }
 
-.section {
-    margin: 40px;
+button {
+    background-color: #1fa2ff;
+    border: none;
+    padding: 10px 18px;
+    margin-top: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    color: white;
+}
+
+button:hover {
+    background-color: #0f7ae5;
 }
 
 .result {
-    font-size: 20px;
-    margin-top: 20px;
+    margin-top: 15px;
     font-weight: bold;
+    line-height: 1.5em;
+}
+
+.quiz-buttons button {
+    margin: 5px;
 }
 </style>
 </head>
@@ -60,35 +81,47 @@ input {
 
 <header>
     <h1>Securing the Future</h1>
-    <p>Your Data. Your Identity. Your Control.</p>
+    <p class="tagline">Protecting your digital identity starts with awareness.</p>
 </header>
 
-<div class="section">
-    <h2>Quick Risk Scan</h2>
-    <input type="email" id="email" placeholder="Enter your email">
-    <br>
-    <button onclick="scanRisk()">Check Risk</button>
-    <div class="result" id="scanResult"></div>
-</div>
+<div class="container">
 
-<div class="section">
-    <h2>Digital Safety Quiz</h2>
+    <div class="card">
+        <h2>Quick Risk Scan</h2>
+        <p>Enter your email to check for potential exposure risks.</p>
+        <input type="email" id="email" placeholder="example@email.com">
+        <br>
+        <button onclick="scanRisk()">Run Scan</button>
+        <div class="result" id="scanResult"></div>
+    </div>
 
-    <p>Do you reuse passwords?</p>
-    <button onclick="addScore(0)">Yes</button>
-    <button onclick="addScore(10)">No</button>
+    <div class="card">
+        <h2>Digital Safety Check</h2>
 
-    <p>Is your social media account public?</p>
-    <button onclick="addScore(0)">Yes</button>
-    <button onclick="addScore(10)">No</button>
+        <p>Do you reuse the same password for multiple accounts?</p>
+        <div class="quiz-buttons">
+            <button onclick="addScore(0)">Yes</button>
+            <button onclick="addScore(15)">No</button>
+        </div>
 
-    <p>Do you use Two-Factor Authentication (2FA)?</p>
-    <button onclick="addScore(10)">Yes</button>
-    <button onclick="addScore(0)">No</button>
+        <p>Is your social media account private?</p>
+        <div class="quiz-buttons">
+            <button onclick="addScore(15)">Yes</button>
+            <button onclick="addScore(0)">No</button>
+        </div>
 
-    <br>
-    <button onclick="showScore()">See My Safety Score</button>
-    <div class="result" id="quizResult"></div>
+        <p>Do you use Two-Factor Authentication?</p>
+        <div class="quiz-buttons">
+            <button onclick="addScore(15)">Yes</button>
+            <button onclick="addScore(0)">No</button>
+        </div>
+
+        <button onclick="showScore()">Calculate My Score</button>
+        <button onclick="resetQuiz()">Reset</button>
+
+        <div class="result" id="quizResult"></div>
+    </div>
+
 </div>
 
 <script>
@@ -98,20 +131,19 @@ function scanRisk() {
     const email = document.getElementById("email").value;
     const result = document.getElementById("scanResult");
 
-    if (email === "") {
-        result.innerHTML = "⚠ Please enter an email address.";
+    if (!email.includes("@")) {
+        result.innerHTML = "Please enter a valid email address.";
         return;
     }
 
-    // Simulated AI risk detection
-    const randomRisk = Math.floor(Math.random() * 3);
-
-    if (randomRisk === 0) {
-        result.innerHTML = "🟢 Low Risk: No major breaches detected. Keep using strong passwords and 2FA.";
-    } else if (randomRisk === 1) {
-        result.innerHTML = "🟡 Medium Risk: Your email may appear in older data leaks. Update passwords.";
-    } else {
-        result.innerHTML = "🔴 High Risk: Multiple breach patterns detected. Change passwords immediately and enable 2FA.";
+    if (email.includes("123") || email.includes("test")) {
+        result.innerHTML = "High Risk: This email pattern is commonly found in breached databases. We recommend updating passwords immediately and enabling two-factor authentication.";
+    } 
+    else if (email.includes("gmail") || email.includes("yahoo")) {
+        result.innerHTML = "Moderate Risk: Public email providers are often targeted. Make sure you are using strong, unique passwords.";
+    } 
+    else {
+        result.innerHTML = "Low Risk: No obvious risk patterns detected. Continue practicing strong digital safety habits.";
     }
 }
 
@@ -121,7 +153,21 @@ function addScore(points) {
 
 function showScore() {
     const result = document.getElementById("quizResult");
-    result.innerHTML = "Your Digital Safety Score: " + score + "/30";
+
+    if (score >= 35) {
+        result.innerHTML = "Your Safety Score: " + score + "/45 — Strong protection habits. Keep it up.";
+    } 
+    else if (score >= 20) {
+        result.innerHTML = "Your Safety Score: " + score + "/45 — Decent, but there’s room to improve your security habits.";
+    } 
+    else {
+        result.innerHTML = "Your Safety Score: " + score + "/45 — Your accounts may be vulnerable. Consider strengthening your privacy settings.";
+    }
+}
+
+function resetQuiz() {
+    score = 0;
+    document.getElementById("quizResult").innerHTML = "";
 }
 </script>
 
